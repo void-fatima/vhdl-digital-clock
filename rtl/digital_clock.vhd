@@ -18,6 +18,10 @@ entity digital_clock is
     countdown_run        : in  std_logic;
     stopwatch_run        : in  std_logic;
     stopwatch_clear      : in  std_logic;
+    alarm_hour           : in  hour_24_t;
+    alarm_minute         : in  minute_second_t;
+    alarm_enable         : in  std_logic;
+    alarm_ack            : in  std_logic;
     seg_h10              : out std_logic_vector(6 downto 0);
     seg_h1               : out std_logic_vector(6 downto 0);
     seg_m10              : out std_logic_vector(6 downto 0);
@@ -26,13 +30,16 @@ entity digital_clock is
     seg_s1               : out std_logic_vector(6 downto 0);
     pm                   : out std_logic;
     am_pm_valid          : out std_logic;
-    countdown_done       : out std_logic
+    countdown_done       : out std_logic;
+    alarm_active         : out std_logic
   );
 end entity;
 
 architecture structural of digital_clock is
   signal gmt_hour                           : hour_24_t;
   signal gmt_minute, gmt_second             : minute_second_t;
+  signal tehran_hour                        : hour_24_t;
+  signal tehran_minute                      : minute_second_t;
   signal clock_hour                         : hour_2digit_t;
   signal clock_minute, clock_second         : minute_second_t;
   signal clock_pm, clock_am_pm_valid        : std_logic;
@@ -53,7 +60,7 @@ begin
     port map (
       gmt_hour => gmt_hour, gmt_minute => gmt_minute, gmt_second => gmt_second,
       city_tehran => city_tehran, format_12h => format_12h,
-      tehran_hour => open, tehran_minute => open,
+      tehran_hour => tehran_hour, tehran_minute => tehran_minute,
       display_hour => clock_hour, display_minute => clock_minute, display_second => clock_second,
       pm => clock_pm, am_pm_valid => clock_am_pm_valid
     );
@@ -69,6 +76,14 @@ begin
       countdown_second => countdown_second, countdown_done => countdown_done,
       stopwatch_hour => stopwatch_hour, stopwatch_minute => stopwatch_minute,
       stopwatch_second => stopwatch_second
+    );
+
+  alarm : entity work.daily_alarm(rtl)
+    port map (
+      clk => clk, reset => reset,
+      tehran_hour => tehran_hour, tehran_minute => tehran_minute,
+      alarm_hour => alarm_hour, alarm_minute => alarm_minute,
+      alarm_enable => alarm_enable, alarm_ack => alarm_ack, alarm_active => alarm_active
     );
 
   select_display : process (all)

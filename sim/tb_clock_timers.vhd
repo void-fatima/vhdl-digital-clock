@@ -56,6 +56,7 @@ begin
       countdown_load => countdown_load, countdown_set_hour => countdown_set_hour,
       countdown_set_minute => countdown_set_minute, countdown_set_second => countdown_set_second,
       countdown_run => countdown_run, stopwatch_run => stopwatch_run, stopwatch_clear => stopwatch_clear,
+      alarm_hour => 0, alarm_minute => 0, alarm_enable => '0', alarm_ack => '0', alarm_active => open,
       seg_h10 => seg_h10, seg_h1 => seg_h1, seg_m10 => seg_m10,
       seg_m1 => seg_m1, seg_s10 => seg_s10, seg_s1 => seg_s1,
       pm => pm, am_pm_valid => am_pm_valid, countdown_done => countdown_done

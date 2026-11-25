@@ -15,6 +15,7 @@ $taskSources = @(
     'rtl\seven_segment.vhd'
     'rtl\display_driver.vhd'
     'rtl\timer_engine.vhd'
+    'rtl\daily_alarm.vhd'
     'rtl\digital_clock.vhd'
     'sim\tb_clock_timers.vhd'
 ) | ForEach-Object { Join-Path $taskRoot $_ }
